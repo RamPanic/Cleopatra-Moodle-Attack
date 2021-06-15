@@ -58,7 +58,7 @@ python3 cleopatra.py --user scorpion --url https://example.edu.ar/login/index.ph
 
 ## Muestras
 
-![enter image description here](https://i.imgur.com/VvblK9f.png)
+![enter image description here](https://i.imgur.com/qHkOEu8.png)
 
 ## Mensajes finales
 
