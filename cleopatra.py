@@ -70,9 +70,17 @@ class MoodleLogin:
 
         self._proxies = {'http': 'socks5h://localhost:9050', 'https': 'socks5h://localhost:9050'}
 
+    def getUsername(self) -> str:
+
+        return self._username
+
     def getPassword(self) -> str:
 
         return self._password
+
+    def getURL(self):
+
+        return self._url
 
     def getOriginalIPAdress(self):
 
@@ -120,6 +128,9 @@ def showInformationFromAttack(args: tuple) -> None:
     print(" Information from attack")
     print(" =======================\n")
 
+    print(f" Username: {moodleLogin.getUsername()}")
+    print(f" Login URL: {moodleLogin.getURL()}")
+    print(f" Type attack: {type_attack}")
     print(f" Total CPU Cores: {multiprocessing.cpu_count()}")
     print(f" Total processes to use: {processes}")
     print(f" Total passwords to test: {totalPasswords}")
@@ -128,8 +139,7 @@ def showInformationFromAttack(args: tuple) -> None:
     if tor_proxy:
         print(f" Tor Proxy IP address: {moodleLogin.getTorIPAddress()}")
 
-    print(f" Original IP address: {moodleLogin.getOriginalIPAdress()}")
-    print(f" Type attack: {type_attack}\n")
+    print(f" Original IP address: {moodleLogin.getOriginalIPAdress()}\n")
 
 def getLinesFromFile(filename: str) -> list:
 
