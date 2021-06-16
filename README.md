@@ -61,6 +61,3 @@ python3 cleopatra.py --user scorpion --url https://example.edu.ar/login/index.ph
 ![cleopatra-help](https://i.imgur.com/qHkOEu8.png)
 ![cleopatra](https://i.imgur.com/4DNmzTs.png)
 
-## Mensajes finales
-
-Sigue en desarrollo de pequeñas cosas :P
